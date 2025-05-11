@@ -12,6 +12,7 @@ namespace K3SaveEditor
             InitializeComponent();
         }
 
+        const int START_ROOM = 2062; // Bytes: 0E 08
         string dataFolder;
         byte[] saveData1, saveData2;
         byte[] room, pX, pY, devas, features, beaten_bosses, crystal_count;
@@ -30,11 +31,6 @@ namespace K3SaveEditor
             EXTRA_BOSSES = 0x28 //21 bytes
         }
 
-        enum SaveData2Offsets
-        {
-            CRYSTALS = 0x0
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             save();
@@ -48,12 +44,12 @@ namespace K3SaveEditor
             panel1.Enabled = true;
 
             // Room
-            room = new byte[] { saveData1[(int)SaveData1Offsets.ROOM], saveData1[(int)SaveData1Offsets.ROOM+1], saveData1[(int)SaveData1Offsets.ROOM+2], 0x0 };
-            label2.Text = "Room " + BitConverter.ToInt32(room, 0); 
+            room = new byte[] { saveData1[(int)SaveData1Offsets.ROOM + 1], saveData1[(int)SaveData1Offsets.ROOM], 0x0, 0x0 };
+            label2.Text = "Room " + (BitConverter.ToInt32(room, 0) - START_ROOM); 
             
             // Player
-            pX = new byte[] { saveData1[(int)SaveData1Offsets.X], saveData1[(int)SaveData1Offsets.X + 1], saveData1[(int)SaveData1Offsets.X + 2], 0x0 };
-            pY = new byte[] { saveData1[(int)SaveData1Offsets.Y], saveData1[(int)SaveData1Offsets.Y + 1], saveData1[(int)SaveData1Offsets.Y + 2], 0x0 };
+            pX = new byte[] { saveData1[(int)SaveData1Offsets.X + 1], saveData1[(int)SaveData1Offsets.X], 0x0, 0x0 };
+            pY = new byte[] { saveData1[(int)SaveData1Offsets.Y + 1], saveData1[(int)SaveData1Offsets.Y], 0x0, 0x0 };
             label3.Text = "Player X: " + BitConverter.ToInt32(pX, 0) + " Y: " + BitConverter.ToInt32(pY, 0);
 
             // Devas
